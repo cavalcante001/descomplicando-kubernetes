@@ -115,4 +115,86 @@ kubectl get pods -w
 # View pod logs
 kubectl logs girus
 kubectl logs girus -c nginx
+kubectl logs -f meu-pod
 ```
+
+## Day 3 - Deployment Management
+
+### Deployment Operations
+```bash
+# Create deployment from YAML file
+kubectl apply -f deployment.yaml
+
+# Get deployment details in YAML format
+kubectl get deployments.apps -o yaml
+
+# List pods with specific label
+kubectl get pods -l app=nginx-deployment
+
+# List all replicasets
+kubectl get replicasets
+
+# Get detailed information about a deployment
+kubectl describe deployments.apps nginx-deployment
+
+# Export deployment configuration to YAML
+kubectl get deployments.apps nginx-deployment -o yaml > temp.yaml
+
+# Delete deployment using YAML file
+kubectl delete -f deployment.yaml
+
+# Create deployment with specific replicas
+kubectl create deployment --image nginx --replicas 3 nginx-deployment
+
+# Delete deployment directly
+kubectl delete deployment nginx-deployment
+```
+
+### Namespace Management
+```bash
+# Delete a namespace
+kubectl delete namespace giropops
+
+# Generate namespace manifest (dry run)
+kubectl create namespace giropops --dry-run=client -o yaml > namespace.yaml
+
+# List deployments in specific namespace
+kubectl get deployments -n giropops
+
+# Execute command in pod within namespace
+kubectl exec -ti -n giropops nginx-deployment-5cb655997b-r8h28 -- nginx -v
+```
+
+### Deployment Updates and Rollouts
+```bash
+# Check rollout status
+kubectl rollout status deployment -n giropops nginx-deployment
+
+# Rollback to previous version
+kubectl rollout undo deployment -n giropops nginx-deployment
+
+# View rollout history
+kubectl rollout history deployment -n giropops nginx-deployment
+
+# View specific revision details
+kubectl rollout history deployment -n giropops nginx-deployment --revision 8
+
+# Pause rollout
+kubectl rollout pause deployment -n giropops nginx-deployment
+
+# Resume rollout
+kubectl rollout resume deployment -n giropops nginx-deployment
+
+# Restart deployment
+kubectl rollout restart deployment -n giropops nginx-deployment
+
+# Scale deployment replicas
+kubectl scale deployment -n giropops --replicas 3 nginx-deployment
+```
+
+### Notes
+- Deployment update strategy:
+  - `surge`: Can have up to 1 pod more than requested (e.g., 11 pods when 10 requested)
+  - `unavailable`: Updates pods in batches of 2
+- Use `-n` or `--namespace` flag to specify namespace for commands
+- Rollout commands work with deployments, daemonsets, and statefulsets
