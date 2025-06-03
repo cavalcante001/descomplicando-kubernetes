@@ -1,6 +1,8 @@
 # Kubernetes Commands Cheat Sheet
 
-## Cluster Management
+## Day 1 - Basic Kubernetes Operations
+
+### Cluster Management
 ```bash
 # Create a new local cluster using kind
 kind create cluster
@@ -12,7 +14,7 @@ kind delete cluster
 kubectl get nodes
 ```
 
-## Pod Management
+### Pod Management
 ```bash
 # Create a pod running nginx
 kubectl run --image nginx
@@ -30,7 +32,7 @@ kubectl delete pods giropops
 kubectl run --image nginx --port 80 giropops --dry-run=client
 ```
 
-## Service Management
+### Service Management
 ```bash
 # Expose pod as a service (default type: ClusterIP)
 kubectl expose pods giropops
@@ -42,7 +44,7 @@ kubectl expose pods giropops --type NodePort
 kubectl delete service giropops
 ```
 
-## Resource Inspection
+### Resource Inspection
 ```bash
 # List pods in kube-system namespace
 kubectl get pods -n kube-system
@@ -60,7 +62,7 @@ kubectl get deployment -A
 kubectl get replicaset -A
 ```
 
-## Configuration and Utilities
+### Configuration and Utilities
 ```bash
 # Get help for kubectl completion
 kubectl completion --help
@@ -69,7 +71,48 @@ kubectl completion --help
 kubectl apply/create -f pod.yaml
 ```
 
-## Notes
+### Notes
 - Use `kubectl` or `k` as shorthand for kubectl commands
 - The `-A` or `--all-namespaces` flag shows resources across all namespaces
 - Use `--dry-run=client` to generate manifests without applying them
+
+## Day 2 - Advanced Pod Operations
+
+### Pod Inspection and Debugging
+```bash
+# Get detailed information about a pod
+kubectl describe pods giropops
+
+# Get pod configuration in YAML format
+kubectl get pods -o yaml
+
+# Get pods with specific label
+kubectl get pods -L run
+
+# Run interactive pods with different images
+kubectl run girus --image busybox -ti
+kubectl run girus-1 --image alpine -ti
+
+# Install curl in Alpine pod
+apk add curl
+
+# Test connectivity to a pod IP
+curl 10.244.2.4
+
+# Attach to a running pod
+kubectl attach girus-1 -c girus-1 -i -t
+
+# Execute commands in pods
+kubectl exec -ti strigus -- bash
+kubectl exec strigus -- cat /usr/share/nginx/html/index.html
+
+# Delete resources from YAML file
+kubectl delete -f pod.yaml
+
+# Watch pods in real-time
+kubectl get pods -w
+
+# View pod logs
+kubectl logs girus
+kubectl logs girus -c nginx
+```
