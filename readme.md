@@ -198,3 +198,47 @@ kubectl scale deployment -n giropops --replicas 3 nginx-deployment
   - `unavailable`: Updates pods in batches of 2
 - Use `-n` or `--namespace` flag to specify namespace for commands
 - Rollout commands work with deployments, daemonsets, and statefulsets
+
+## Day 4 - ReplicaSet and DaemonSet Management
+
+### ReplicaSet Operations
+```bash
+# Get detailed information about a ReplicaSet
+kubectl describe replicaset nginx-deployment-7f7bfc7595
+
+# Create ReplicaSet from YAML file
+kubectl apply -f replicaset.yaml
+
+# Scale ReplicaSet replicas
+kubectl scale replicaset nginx-deployment-7f7bfc7595 --replicas 1
+
+# Delete specific pod in ReplicaSet
+kubectl delete pods nginx-replicaset-xwqdv
+
+# Delete ReplicaSet directly
+kubectl delete replicaset nginx-replicaset
+
+# Delete ReplicaSet using YAML file
+kubectl delete -f replicaset.yaml
+```
+
+### DaemonSet Operations
+```bash
+# List all DaemonSets
+kubectl get daemonsets
+
+# Get DaemonSets across all namespaces
+kubectl get daemonsets -A
+
+# Get detailed information about a DaemonSet
+kubectl describe daemonset <daemonset-name>
+
+# Delete DaemonSet
+kubectl delete daemonset <daemonset-name>
+```
+
+### Notes
+- ReplicaSets ensure a specified number of pod replicas are running at any given time
+- DaemonSets ensure all (or some) nodes run a copy of a pod
+- Use `kubectl get ds` as shorthand for `kubectl get daemonsets`
+- ReplicaSets are typically managed by Deployments rather than directly
